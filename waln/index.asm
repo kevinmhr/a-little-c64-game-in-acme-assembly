@@ -1,6 +1,6 @@
 !cpu 6502 
 
-!to "snake.prg",cbm    ; output file 
+!to "waln.prg",cbm    ; output file 
 
 
 
