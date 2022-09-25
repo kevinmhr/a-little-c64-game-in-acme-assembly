@@ -18,7 +18,7 @@ nex                inx
 		      
                       stx appleblock
                     ;stx whiteblock 
-                 
+                 stx $d021
 			
  
  			  
@@ -55,11 +55,11 @@ gameloop
  stx $9000
  
 	 
-	
+	 
  
 
- 
-		stx $d021
+   
+		
 	
 		
 			
