@@ -31,7 +31,7 @@ currentscreen =	$c1f7
 menuscreen = 	$c1f6
 controlsscreen = $c1f5
 optionsscreen = $c1f4
-
+lastkey=$f6
 blackblock = 		$c201 ; background space character
 whiteblock = 		$c202 ; collision square block value
 bordercolour = 		$c203

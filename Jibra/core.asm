@@ -6,7 +6,7 @@ none	LDA #$FF  ; maximum frequency value, finally made this work
 		STA $D412 ; voice 3 control register
 		rts
  		
- 
+
 blockcorre
                
 nex                inx 
@@ -155,14 +155,14 @@ scanjoy
            lda $dc00
            cmp #$7f
            beq setdirection 
-           sta currentdirection
+           sta lastkey
            rts
 setdirection	
  rts
 
 movejoy 
  
-                lda currentdirection
+                lda lastkey
                 cmp #$7b   
 				beq left ;
 				cmp #$7e   
@@ -171,14 +171,36 @@ movejoy
 				beq right
 				cmp #$7d   
 				beq down
-			    sta currentdirection
+			    
 				 rts
 				
+directionchange
+            	lda lastkey
+				 cmp #$7b   
 				 
+				beq writeright
+				cmp #$7e   
+				beq writedown
+				cmp #$77    
+				beq writeleft
+				cmp #$7d   
+				beq writeup
+				rts
+				
 ;move 			
  
-                
-                
+writeleft lda #$7b
+          sta lastkey
+          rts  
+writeright           lda #$77
+          sta lastkey
+          rts  
+writeup          lda #$7e
+          sta lastkey
+          rts  
+writedown  lda #$7d
+           sta lastkey
+          rts  
                 
                 
                
@@ -424,10 +446,14 @@ eatapple		lda applepositionL
 
 comparehiapple		lda applepositionH	
 					cmp currentpositionH
+					
 					beq growsnake
+					
 					rts			
 
-growsnake		lda snakelengthL
+growsnake		
+                 jsr directionchange	 
+              lda snakelengthL
 				
 				clc
 				adc #02 ; low and hi address needs two
@@ -435,15 +461,17 @@ growsnake		lda snakelengthL
 			
 				bcs addsegmentH
 				jsr addscore
-				jsr increasespeed
+                
+               jsr increasespeed
 				jsr generaterandomappleposition	
+				
 				rts
 
 addscore		clc
 				inc scoreones
 				jsr lazbeep1
 				jsr lazbeep3
-				 
+				
 				 
 				lda #$ff
 compras				cmp $d012
@@ -475,6 +503,7 @@ increasespeed		lda snakespeed
 
 generaterandomappleposition	jsr generaterandomH
 							jsr generaterandomL
+							
 							rts
 				
 generaterandomH		lda $d41b ;
@@ -483,7 +512,7 @@ generaterandomH		lda $d41b ;
 					clc
 					adc #$04 ;4 for 7
 					sta applepositionH
-							 
+					
 					rts
 
 ; task the lower byte generation with all the checking if non blackblock or offscreen setting
